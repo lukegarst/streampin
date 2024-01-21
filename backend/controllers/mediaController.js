@@ -3,18 +3,12 @@ const asyncHandler = require('express-async-handler')
 const Media = require('../models/mediaModel')
 const User = require('../models/userModel')
 
-// @desc    Show media
-// @route   GET /home
-// @access  Private
 const getMedia = asyncHandler(async (req, res) => {
   const media = await Media.find({ user: req.user.id })
 
   res.status(200).json(media)
 })
 
-// @desc    Add media
-// @route   POST /home
-// @access  Private
 const postMedia = asyncHandler(async (req, res) => {
   if(!req.body.text) {
     res.status(400)
@@ -29,9 +23,6 @@ const postMedia = asyncHandler(async (req, res) => {
   res.status(200).json(media)
 })
 
-// @desc    Update media
-// @route   PUT /home/:id
-// @access  Private
 const updateMedia = asyncHandler(async (req, res) => {
   const media = await Media.findById(req.params.id)
 
@@ -42,13 +33,11 @@ const updateMedia = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user.id)
 
-  //Check for user
   if(!user) {
     res.status(401)
     throw new Error('User not found')
   }
 
-  //Make sure the logged in user matches the media user
   if(media.user.toString() !== user.id) {
     res.status(401)
     throw new Error('User not authorized')
@@ -61,9 +50,6 @@ const updateMedia = asyncHandler(async (req, res) => {
   res.status(200).json(updatedMedia)
 })
 
-// @desc    Delete media
-// @route   DELETE /home/:id
-// @access  Private
 const deleteMedia = asyncHandler(async (req, res) => {
   const media = await Media.findById(req.params.id)
 
@@ -74,13 +60,11 @@ const deleteMedia = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user.id)
 
-  //Check for user
   if(!user) {
     res.status(401)
     throw new Error('User not found')
   }
 
-  //Make sure the logged in user matches the media user
   if(media.user.toString() !== user.id) {
     res.status(401)
     throw new Error('User not authorized')
